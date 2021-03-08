@@ -3,8 +3,7 @@
   tasks:
       - name: Install package nginx
         apt: name=nginx update_cache=yes
-      - name: ensure package cache is up to date
-        action: apt update_cache=yes cache_valid_time=3600
+      
       - name: Starting service nginx
         service: name=nginx state=started
         
