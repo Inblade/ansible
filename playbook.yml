@@ -3,7 +3,10 @@
   tasks:
       - name: Install package nginx
         apt: name=nginx update_cache=yes
-      
-      - name: Starting service nginx
-        service: name=nginx state=started
+        notify: Restart Nginx
+  handlers:
+      - name: Restart Nginx
+        ansible.builtin.service:
+          name: nginx 
+          state: restarted
         
