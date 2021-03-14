@@ -1,11 +1,10 @@
 ---
 - hosts: all
   tasks:
-      - name: Install package nginx
-        apt: name=nginx update_cache=yes
-        notify: Restart Nginx
-  handlers:
-      - name: Restart Nginx
-          name: nginx 
-          state: restarted
-        
+    - name: Install package nginx
+      apt: name=nginx update_cache=yes
+      notify: restart Nginx
+    - name: install nginx config files
+      template:
+        src: ./srv/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
