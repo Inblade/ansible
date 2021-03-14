@@ -6,5 +6,5 @@
       notify: restart Nginx
     - name: install nginx config files
       template:
-        src: ./srv/nginx.conf.j2
+        src: ./templates/nginx.conf.j2
         dest: /etc/nginx/nginx.conf
