@@ -13,7 +13,6 @@
   handlers:
     - name: Reload nginx
       service: name=nginx state=reloaded
-      sudo: yes
     - name: Starting service nginx
       service: name=nginx state=started
       sudo: yes
