@@ -3,7 +3,6 @@
   tasks:
     - name: Install package nginx
       apt: name=nginx update_cache=yes
-      notify: Reload nginx
       notify: Starting service nginx
     - name: Install nginx config files
       template:
