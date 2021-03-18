@@ -1,10 +1,39 @@
 ---
 - hosts: all
+  vars:
+    user: www-data
+    nginx_log_folder_remote: /var/log/nginx
+    nginx_config_remote: /etc/nginx
+    virtual_hosts_folder_remote: /etc/nginx/conf.d
+    site_folder_remote: /home
+    domain_name: dkocheto.devops.rebrain.srwx.net
   tasks:
     - name: Install package nginx
-      apt: name=nginx update_cache=yes
-      notify: restart Nginx
-    - name: install nginx config files
+      apt:
+        name=nginx
+        update_cache=yes
+      notify: Starting service nginx
+    - name: Create site folder
+      file:
+        path=/home/{{ domain_name }}
+        state=directory
+    - name: Generate (virtual_host HTTP; HTTP nginx.conf; title page)
       template:
-        src: nginx.conf.j2
-        dest: /etc/nginx/nginx.conf
+        src={{ item.src }}
+        dest={{ item.dest }}
+        mode=0644
+      loop:
+        -  { src: "host1.j2" , dest: "/etc/nginx/conf.d/host1.conf"}
+        -  { src: "nginx.j2" , dest: "/etc/nginx/nginx.conf"}
+        -  {src: "nginx.j2"  , dest: "/etc/nginx/{{ domain_name }}/index.html.j2"}
+      notify: Reload nginx
+    handlers:
+      - name: Reload nginx
+        service:
+          name=nginx
+          state=reloaded
+      - name: Starting service nginx
+        service:
+          name=nginx
+          state=started
+        sudo: yes
