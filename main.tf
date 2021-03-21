@@ -23,6 +23,7 @@ resource "digitalocean_droplet" "Dkocheto" {
   tags     = [digitalocean_tag.devops.id, digitalocean_tag.mail.id]
   ssh_keys = [digitalocean_ssh_key.my_ssh_devops.id, data.digitalocean_ssh_key.rebrain.id]
 }
+
 resource "local_file" "hosts" {
   filename = "hosts"
   content = templatefile("${path.module}/inventory.tpl", {
