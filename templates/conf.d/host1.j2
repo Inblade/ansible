@@ -3,8 +3,6 @@ server {
 	{% for item in vars %}
 	server_name,root /home/{{ domain_name }};
 	{% endfor %}
-	#server_name  {{ domain_name }};
-	#root /home/{{ domain_name }};
 	index index.php index.html;
 
 	location / {
