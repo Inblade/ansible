@@ -1,5 +1,5 @@
 - name: Install certbot
-  yum: name=certbot state=present
+  apt: name=certbot state=present
 
 - name: Create LE folder
   file: path=/etc/letsencrypt state=directory
