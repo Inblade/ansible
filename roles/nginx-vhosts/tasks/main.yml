@@ -1,14 +1,12 @@
 ---
 # tasks file for nginx-vhosts
 
-- name: Generate virtual_host HTTP
+- name: Generate (virtual_host HTTP; virtual_host HTTPS)
   template:
-    src=host1.j2
-    dest={{ virtual_hosts_folder_remote }}/{{ domain_name }}.conf mode=0644
-  notify: Reload nginx
-
-- name: Generate virtual_host HTTPS
-  template:
-    src=host2.j2
-    dest={{ virtual_hosts_folder_remote }}/{{ domain_name }}.conf mode=0644
+    src={{ item.src }}
+    dest={{ item.dest }}
+    mode=0644
+  loop:
+    -  { src: 'host1.j2' , dest: '{{ virtual_hosts_folder_remote }}/{{ domain_name }}.conf'}
+    -  { src: 'host2.j2' , dest: '{{ virtual_hosts_folder_remote }}/{{ domain_name }}.conf'}
   notify: Reload nginx
