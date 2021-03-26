@@ -5,12 +5,21 @@
   file: path=/etc/letsencrypt state=directory
 
 - name: Create letsencrypt certificate
-  shell: certbot certonly --agree-tos -n --webroot -w /home/{{ domain_name }} -m {{ letsencrypt_email }} -d {{ domain_name }} 
+  shell: certbot certonly --agree-tos -n --webroot -w /home/{{ domain_name }} -m {{ letsencrypt_email }} -d {{ domain_name }}
   args:
     creates: /etc/letsencrypt/live/{{ domain_name }}
+
+- name: Generate virtual_host HTTPS
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    mode=0644
+  loop:
+    -  { src: 'nginxssl.j2' , dest: '{{ virtual_hosts_folder_remote }}/{{ domain_name }}.conf'}
+  notify: Reload nginx
 
 - name: Add letsencrypt cronjob for cert renewal
   cron:
     name: letsencrypt_renewal
     special_time: weekly
-    job: certbot --renew certonly -n --webroot -w /home/{{ domain_name }} -m {{ letsencrypt_email }} -d {{ domain_name }} && service nginx reload
+    job: certbot --renew certonly -n --webroot -w /home/dkocheto.devops.rebrain.srwx.net -m {{ letsencrypt_email }} -d {{ domain_name }} && service nginx reload
