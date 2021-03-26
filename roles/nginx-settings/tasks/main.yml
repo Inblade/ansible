@@ -12,12 +12,6 @@
     path=/home/{{ domain_name }}
     state=directory
 
-- name: Autostart webserver
-  service:
-    name=nginx
-    state=started
-    enabled=yes
-
 - name: Generate HTTP nginx.conf
   template:
     src=nginx.j2
