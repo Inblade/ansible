@@ -1,0 +1,16 @@
+- name: Install certbot
+  yum: name=certbot state=present
+
+- name: Create LE folder
+  file: path=/etc/letsencrypt state=directory
+
+- name: Create letsencrypt certificate
+  shell: certbot certonly --agree-tos -n --webroot -w /home/{{ domain_name }} -m {{ letsencrypt_email }} -d {{ domain_name }} 
+  args:
+    creates: /etc/letsencrypt/live/{{ domain_name }}
+
+- name: Add letsencrypt cronjob for cert renewal
+  cron:
+    name: letsencrypt_renewal
+    special_time: weekly
+    job: certbot --renew certonly -n --webroot -w /home/{{ domain_name }} -m {{ letsencrypt_email }} -d {{ domain_name }} && service nginx reload
