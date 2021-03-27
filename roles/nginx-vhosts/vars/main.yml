@@ -1,0 +1,11 @@
+---
+# vars file for nginx-vhosts
+
+user: www-data
+worker_processes: auto
+worker_connections: 1024
+nginx_log_folder_remote: /var/log/nginx
+nginx_config_remote: /etc/nginx
+virtual_hosts_folder_remote: /etc/nginx/conf.d
+site_folder_remote: /home
+domain_name: dkocheto.devops.rebrain.srwx.net

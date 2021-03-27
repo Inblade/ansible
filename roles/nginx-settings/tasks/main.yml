@@ -1,0 +1,50 @@
+---
+# tasks file for nginx-settings
+
+- name: Check Linux distibutive
+  debug:
+    var=ansible_os_family
+
+- block: # =======Block for Ubuntu=======
+
+  - name: Update package list
+    apt:
+      cache_valid_time=3600
+      update_cache=yes
+
+  - name: Install package nginx
+    apt:
+      name=nginx
+      update_cache=yes
+    notify: Starting service nginx
+
+  when: ansible_os_family == "Debian"
+
+- block: # =======Block for Redhat=======
+
+  - name: Install epel-release
+    yum:
+      name=epel-release
+      state=latest
+
+  - name: Install Nginx
+    yum:
+      name=nginx
+      state=latest
+
+  when: ansible_os_family == "RedHat"
+
+- name: Create site folder
+  file:
+    path=/home/{{ domain_name }}
+    state=directory
+
+- name: Generate (HTTP nginx.conf; title page)
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    mode=0644
+  loop:
+    -  { src: 'nginx.j2' , dest: '{{ nginx_config_remote }}/nginx.conf'}
+    -  { src: 'index.j2' , dest: '{{ site_folder_remote }}/{{ domain_name }}/index.j2'}
+  notify: Reload nginx
