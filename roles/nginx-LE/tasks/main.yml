@@ -22,4 +22,4 @@
   cron:
     name: letsencrypt_renewal
     special_time: weekly
-    job: certbot --renew certonly -n --webroot -w /home/dkocheto.devops.rebrain.srwx.net -m {{ letsencrypt_email }} -d {{ domain_name }} && service nginx reload
+    job: /usr/bin/certbot --renew certonly -n --webroot -w /home/dkocheto.devops.rebrain.srwx.net -m {{ letsencrypt_email }} -d {{ domain_name }} && service nginx reload
