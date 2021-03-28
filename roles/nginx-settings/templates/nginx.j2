@@ -1,4 +1,4 @@
-user www-data;
+user {{ nginx_web_owner }};
 worker_processes auto;
 error_log {{ nginx_log_folder_remote }}/error.log;
 pid /run/nginx.pid;
