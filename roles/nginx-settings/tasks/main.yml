@@ -5,19 +5,24 @@
   debug:
     var=ansible_os_family
 
+- name: setting Debian facts
+  set_fact:
+    nginx_web_owner: www-data
+  when: ansible_os_family == "Debian"
+
+- name: setting RedHat facts
+  set_fact:
+    nginx_web_owner: nginx
+  when: ansible_os_family == "RedHat"
+
 - block: # =======Block for Ubuntu=======
 
-  - name: Update package list
-    apt:
-      cache_valid_time=3600
-      update_cache=yes
-
-  - name: Install package nginx
+  - name: Update package list & Install nginx os_family == "Debian"
     apt:
       name=nginx
+      cache_valid_time=3600
       update_cache=yes
     notify: Starting service nginx
-
   when: ansible_os_family == "Debian"
 
 - block: # =======Block for Redhat=======
@@ -25,13 +30,10 @@
   - name: Install epel-release
     yum:
       name=epel-release
-      state=latest
-
-  - name: Install Nginx
-    yum:
+      state=present
       name=nginx
-      state=latest
-
+      state=present
+    notify: Starting service nginx
   when: ansible_os_family == "RedHat"
 
 - name: Create site folder
