@@ -1,9 +1,6 @@
 ---
 - hosts: all
+  vars_files:
+    - vars/main.yml
   roles:
-    - postfix
-  vars:
-    postfix_aliases:
-      - user: root
-        alias: dkocheto@test.org
-
+    - geerlingguy.security
