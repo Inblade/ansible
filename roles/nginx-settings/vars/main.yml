@@ -1,0 +1,13 @@
+---
+# vars file for nginx-settings
+
+user: www-data
+worker_processes: auto
+worker_connections: 1024
+send: 'on'
+nopush: 'on'
+nodelay: 'on'
+nginx_log_folder_remote: /var/log/nginx
+nginx_config_remote: /etc/nginx
+site_folder_remote: /home
+domain_name: dkocheto.devops.rebrain.srwx.net
