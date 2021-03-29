@@ -5,5 +5,5 @@
   vars:
     postfix_aliases:
       - user: root
-        alias: you@yourdomain.org
+        alias: dkocheto@test.org
 
