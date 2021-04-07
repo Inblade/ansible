@@ -1,0 +1,14 @@
+---
+# tasks file for nginx-vhosts
+
+- name: Generate (virtual_host HTTP; virtual_host HTTPS; sertificate; key)
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    mode=0644
+  loop:
+    -  { src: 'host1.j2' , dest: '{{ virtual_hosts_folder_remote }}/{{ domain_name }}.conf'}
+    -  { src: 'host2.j2' , dest: '{{ virtual_hosts_folder_remote }}/{{ domain_name }}.conf'}
+    -  {src: 'cert.crt', dest: '{{ virtual_hosts_folder_remote }}/cert.crt'}
+    -  {src: 'cert.key', dest: '{{ virtual_hosts_folder_remote }}/cert.key'}
+  notify: Reload nginx

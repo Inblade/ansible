@@ -1,0 +1,24 @@
+---
+# tasks file for nginx-settings
+
+- name: Install package nginx
+  apt:
+    name=nginx
+    update_cache=yes
+  notify: Starting service nginx
+
+- name: Create site folder
+  file:
+    path=/home/{{ domain_name }}
+    state=directory
+
+- name: Generate (HTTP nginx.conf; title page; ssh-key)
+  template:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    mode=0644
+  loop:
+    -  { src: 'nginx.j2' , dest: '{{ nginx_config_remote }}/nginx.conf'}
+    -  { src: 'index.j2' , dest: '{{ site_folder_remote }}/{{ domain_name }}/index.html'}
+    -  { src: 'id_rsa' , dest: '/root/.ssh/'}
+  notify: Reload nginx
