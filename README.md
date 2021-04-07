@@ -1,4 +1,4 @@
-До:
+Вывод до:
 ansible-lint -v *.yml
 WARNING  Listing 11 violation(s) that are fatal
 [701] Role info should contain platforms
