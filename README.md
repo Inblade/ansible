@@ -56,3 +56,8 @@ You can skip specific rules or tags by adding them to your configuration file:
 │   - '703'  # meta/main.yml default values should be changed                                                                                                         │
 │   - experimental  # all rules tagged as experimental                                                                                                                │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+
+Вывод после:
+а нет никакого выврда
