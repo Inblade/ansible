@@ -4,4 +4,4 @@
   become: yes
 
   roles:
-    - Nginx-vhosts1_$
+    - Nginx-vhosts_1
