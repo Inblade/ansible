@@ -2,7 +2,7 @@
 allow_duplicates: true
 galaxy_info:
   author: Dkocheto@gmail.com
-  description: Nginx-settings1_$
+  description: Nginx-settings_1
   company: Inblade INC
 
   # If the issue tracker for your role is not on github, uncomment the
