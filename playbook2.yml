@@ -3,23 +3,21 @@
   hosts: all
   become: yes
   tasks:
-  - name: Install epel-release
-    yum: name=epel-release state=latest
   - name: Install Nginx
-    yum: name=nginx
+    apt: name=nginx
   - name: Autostart webserver
     service: name=nginx state=started enabled=yes
-- name: Configuring Nginx 23uk-2
-  hosts: 23uk-2.devops.rebrain.srwx.net
+- name: Configuring Nginx dkochetov-2
+  hosts: dkochetov-2.devops.rebrain.srwx.net
   become: yes
   tasks:
   - name: Generate nginx.conf
     template: src=nginx/nginx2.j2 dest=/etc/nginx/nginx.conf mode=0644
     notify: Reload nginx
   - name: Create directory
-    file: path=/home/23uk-2.devops.rebrain.srwx.net state=directory
+    file: path=/home/dkochetov-2.devops.rebrain.srwx.net state=directory
   - name: Copy index.html
-    template: src=html/index.html dest=/home/23uk-2.devops.rebrain.srwx.net/index.html mode=0644
+    template: src=html/index.html dest=/home/dkochetov-2.devops.rebrain.srwx.net/index.html mode=0644
     notify: Reload nginx
   - name: Copy hostname2
     template: src=hostname/hostname2 dest=/etc/hostname mode=0644
