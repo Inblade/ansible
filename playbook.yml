@@ -1,0 +1,8 @@
+---
+- name: Install Nginx
+  hosts: all
+  become: yes
+
+  roles:
+    - nginx1-1
+    - nginx1-2

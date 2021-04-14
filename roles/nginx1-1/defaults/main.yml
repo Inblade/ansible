@@ -1,0 +1,10 @@
+---
+# defaults file for nginx12
+
+user: www-data
+worker_processes: auto
+worker_connections: 1024
+nginx_log_folder_remote: /var/log/nginx
+nginx_config_remote: /etc/nginx
+site_folder_remote: /home
+domain_name: dkochetov-1.devops.rebrain.srwx.net
