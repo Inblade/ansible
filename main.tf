@@ -21,7 +21,7 @@ resource "digitalocean_tag" "mail" {
 resource "aws_route53_record" "dns_rebrain" {
   zone_id = data.aws_route53_zone.dns.zone_id
   count   = length(var.domains)
-  name    = "dkochetov-${element(var.domains, count.index)}.${data.aws_route53_zone.dns.name}"
+  name    = "dkocheto-${element(var.domains, count.index)}.${data.aws_route53_zone.dns.name}"
   type    = "A"
   ttl     = "30"
   records = [element(digitalocean_droplet.Dkocheto.*.ipv4_address, count.index)]
@@ -35,34 +35,30 @@ resource "digitalocean_droplet" "Dkocheto" {
   size     = "s-1vcpu-1gb"
   tags     = [digitalocean_tag.devops.id, digitalocean_tag.mail.id]
   ssh_keys = [digitalocean_ssh_key.my_ssh_dkocheto.id, data.digitalocean_ssh_key.rebrain.id]
-  /*
-  provisioner "remote-exec" {
-    inline = ["touch /root/123"]
-  }
-*/
-  provisioner "local-exec" {
-    working_dir = "./"
-    command     = "sleep 15 && ./playbook.yml -i hosts"
-  }
+
 }
-/*
-resource "null_resource" "playbook1" {
+
+resource "null_resource" "playbook" {
   provisioner "local-exec" {
-    command = "sleep 15 && ansible-playbook playbook1.yml -i dkochetov-1.devops.rebrain.srwx.net"
+    command = "sleep 15 && ansible-playbook playbook.yml -i hosts"
   }
   depends_on = [aws_route53_record.dns_rebrain]
 }
 
-resource "null_resource" "playbook2" {
-  provisioner "local-exec" {
-    command = "ansible-playbook playbook2.yml -i dkochetov-2.devops.rebrain.srwx.net"
-  }
-  depends_on = [null_resource.playbook1]
+/*resource "local_file" "hosts" {
+  count    = length(var.devs)
+  filename = "hosts"
+  content = templatefile("${path.module}/inventory.tpl", {
+    ip1 = digitalocean_droplet.Dkocheto.*.ipv4_address
+  })
 }
 */
 resource "local_file" "hosts" {
+  count = length(var.domains)
+  content = templatefile("inventory.tpl", {
+    ipaddr0 = digitalocean_droplet.Dkocheto.0.ipv4_address,
+    ipaddr1 = digitalocean_droplet.Dkocheto.1.ipv4_address
+    }
+  )
   filename = "hosts"
-  content = templatefile("${path.module}/inventory.tpl", {
-    ip = digitalocean_droplet.Dkocheto.*.ipv4_address
-  })
 }
