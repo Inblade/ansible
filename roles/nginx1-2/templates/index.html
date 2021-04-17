@@ -1,1 +1,6 @@
-super puper
+Write a terraform file that creates two VPSs. Both VPS must be configured with ansible using local-exec provisioner.
+Install nginx on both VPS.
+Configure nginx on the first VPS as a load balancer and proxy all requests via proxy_pass + upstream to the second VPS.
+Configure nginx on the second VPS as an application server with any static html.
+The hostname should be correctly corrected on the VPS, and the Ansible inventory file should be filled in automatically.
+Commit the final script to the repository, send the link in the response.
