@@ -1,19 +1,22 @@
 ---
-# tasks file for nginx12
+# tasks file for nginx1-1
 
-- name: Install NGINX
-  hosts: dkochetov-1.devops.rebrain.srwx.net
-  become: yes
-  tasks:
-  - name: Install Nginx
-    apt: name=nginx
+- name: Install Nginx
+  apt: name=nginx
   notify: Reload nginx
-- name: Generate nginx.conf dkochetov-1 & copy hostname1
+
+- name: Create site folder
+  file:
+    path=/home/{{ domain_name }}
+    state=directory
+    mode=0644
+
+- name: Generate nginx.conf dkocheto-1
   template:
-  src={{ item.src }}
-  dest={{ item.dest }}
-  mode=0644
+    src={{ item.src }}
+    dest={{ item.dest }}
+    mode=0644
   loop:
-  -  { src: 'nginx1.j2' , dest: 'dkochetov-1.devops.rebrain.srwx.net/etc/nginx/nginx.conf'}
-  #-  { src: 'hostname1', dest: 'dkochetov-1.devops.rebrain.srwx.net/etc/hostname'}
+    -  { src: 'nginx1.j2' , dest: '{{ nginx_config_remote }}/nginx.conf'}
+    -  {src: 'hostname1' ,  dest: '/etc/hostname'}
   notify: Reload nginx
