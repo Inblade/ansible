@@ -6,4 +6,4 @@ worker_connections: 1024
 nginx_log_folder_remote: /var/log/nginx
 nginx_config_remote: /etc/nginx
 site_folder_remote: /home
-domain_name: dkochetov-1.devops.rebrain.srwx.net
+domain_name: dkocheto-2.devops.rebrain.srwx.net
