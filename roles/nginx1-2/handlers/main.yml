@@ -1,2 +1,7 @@
 ---
-# handlers file for nginx11
+# handlers file for nginx1-2
+
+- name: Reload nginx
+  service: name=nginx state=reloaded
+- name: Autostart webserver
+  service: name=nginx state=started enabled=yes
