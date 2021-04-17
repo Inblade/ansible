@@ -1,8 +1,7 @@
-[all]
-${join("\n", "${formatlist("%s",
-        "${ip}",
-        )}",
-      )}
-[all:vars]
-ansible_ssh_user=root
-ansible_python_interpreter=/usr/bin/python3
+[web1]
+${ipaddr0}
+[web2]
+${ipaddr1}
+[vars]
+ansible_user=root
+ansible_ssh_args='-o StrictHostKeyChecking=no'
