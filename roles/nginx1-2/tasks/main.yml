@@ -3,7 +3,7 @@
 
 - name: Install Nginx
   apt: name=nginx
-  notify: Reload nginx
+  notify: Autostart webserver
 
 - name: Create site folder
   file:
@@ -18,6 +18,6 @@
     mode=0644
   loop:
     -  { src: 'nginx2.j2' , dest: '{{ nginx_config_remote }}/nginx.conf'}
-    -  { src: 'index.html' , dest: '/home/{{ domain_name }}/index.html'}
+    -  { src: 'index.html' , dest: '{{ site_folder_remote }}/{{ domain_name }}/index.html'}
     -  { src: 'hostname2' ,  dest: '/etc/hostname'}
   notify: Reload nginx
