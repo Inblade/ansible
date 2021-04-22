@@ -9,13 +9,13 @@
   file:
     path=/home/{{ domain_name }}
     state=directory
-    mode=0644
+    mode=0755
 
 - name: Generate nginx.conf dkocheto-2
   template:
     src={{ item.src }}
     dest={{ item.dest }}
-    mode=0644
+    mode=0755
   loop:
     -  { src: 'nginx2.j2' , dest: '{{ nginx_config_remote }}/nginx.conf'}
     -  { src: 'index.html' , dest: '{{ site_folder_remote }}/{{ domain_name }}/index.html'}
