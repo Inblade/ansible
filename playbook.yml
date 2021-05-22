@@ -1,0 +1,7 @@
+---
+- name: Install Nginx
+  hosts: all
+  remote_user: root
+  
+  roles:
+    - nginx-settings
