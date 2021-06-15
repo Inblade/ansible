@@ -34,31 +34,8 @@ variable "region" {
   description = "The region to create the resources in."
   type        = string
 }
-
-
 variable "name" {
   description = "Name for the load balancer forwarding rule and prefix for supporting resources."
   type        = string
   default     = "http-multi-backend"
-}
-
-
-variable "enable_http" {
-  description = ""
-  type        = bool
-  default     = true
-}
-
-variable "static_content_bucket_location" {
-  description = ""
-  type        = string
-  default     = "US"
-}
-
-
-variable "custom_labels" {
-  description = ""
-  type        = map(string)
-
-  default = {}
 }
