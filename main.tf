@@ -1,10 +1,10 @@
 #Data block
 data "aws_route53_zone" "dns" {
-  name         = "devops.rebrain.srwx.net."
+  name         = "devops.sample.srwx.net."
   private_zone = false
 }
 data "digitalocean_ssh_key" "rebrain" {
-  name = "REBRAIN.SSH.PUB.KEY"
+  name = "another.SSH.PUB.KEY"
 }
 #create resource my_ssh_key
 resource "digitalocean_ssh_key" "my_ssh_dkocheto" {
@@ -25,7 +25,7 @@ resource "digitalocean_droplet" "Dkocheto" {
   region   = "nyc3"
   size     = "s-1vcpu-1gb"
   tags     = [digitalocean_tag.devops.id, digitalocean_tag.mail.id]
-  ssh_keys = [digitalocean_ssh_key.my_ssh_dkocheto.id, data.digitalocean_ssh_key.rebrain.id]
+  ssh_keys = [digitalocean_ssh_key.my_ssh_dkocheto.id, data.digitalocean_ssh_key.another.id]
 }
 
 resource "aws_route53_record" "dns_rebrain" {
