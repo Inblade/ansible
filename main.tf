@@ -54,7 +54,7 @@ resource "local_file" "ansible_inventory" {
 
 #Balancing GCP
 
-# Создаем группу для наших VPS
+# Create group for VPS
 resource "google_compute_instance_group" "ans13-group" {
   name        = "ans13-group"
   description = "Instance Group for LB GCP"
@@ -72,7 +72,7 @@ resource "google_compute_instance_group" "ans13-group" {
   zone = var.zone
 }
 
-# Создаем разрешающее правило файрвола для Google Cloud health checking systems
+# Create acept firewall rule for Google Cloud health checking systems
 resource "google_compute_firewall" "ans13-firewall" {
   name    = "ans13-firewall"
   network = google_compute_network.ans13-vm-network.name
@@ -84,7 +84,7 @@ resource "google_compute_firewall" "ans13-firewall" {
   source_ranges = ["0.0.0.0/0"]
 }
 
-# Создаем health check
+# Create health check
 resource "google_compute_health_check" "ans13-health-check" {
   name               = "ans13-health-check"
   timeout_sec        = 1
@@ -94,7 +94,7 @@ resource "google_compute_health_check" "ans13-health-check" {
   }
 }
 
-# Создаем backend service
+# Create backend service
 resource "google_compute_backend_service" "ans13-backend-service" {
   name                  = "ans13-backend-service"
   health_checks         = [google_compute_health_check.ans13-health-check.id]
@@ -105,20 +105,20 @@ resource "google_compute_backend_service" "ans13-backend-service" {
   }
 }
 
-# Создаем URL map для входящих запросов для дефолтного backend service
+# Create URL map for incoming for default backend service
 resource "google_compute_url_map" "ans13-url-map" {
   name            = "ans13-url-map"
   description     = "url map for service"
   default_service = google_compute_backend_service.ans13-backend-service.id
 }
 
-# Создаем HTTP proxy для маршрутизации запросов для нашего URL map
+# Create an HTTP proxy to route requests for our URL map
 resource "google_compute_target_http_proxy" "ans13-http-proxy" {
   name    = "ans13-http-proxy"
   url_map = google_compute_url_map.ans13-url-map.id
 }
 
-# Создаем глобальное правило форвардинга для входящих запросов к нашему proxy
+# Create a global forwarding rule for incoming requests to our proxy
 resource "google_compute_global_forwarding_rule" "ans13-forwarding-rule" {
   name       = "ans13-forwarding-rule"
   ip_address = google_compute_global_address.ans13-lb-address.address
