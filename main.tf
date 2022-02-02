@@ -1,6 +1,6 @@
 #Data block
-data "digitalocean_ssh_key" "rebrain" {
-  name = "REBRAIN.SSH.PUB.KEY"
+data "digitalocean_ssh_key" "another" {
+  name = "another.SSH.PUB.KEY"
 }
 #create resource my_ssh_key
 resource "digitalocean_ssh_key" "my_ssh_devops" {
@@ -21,7 +21,7 @@ resource "digitalocean_droplet" "Dkocheto" {
   region   = "nyc3"
   size     = "s-1vcpu-1gb"
   tags     = [digitalocean_tag.devops.id, digitalocean_tag.mail.id]
-  ssh_keys = [digitalocean_ssh_key.my_ssh_devops.id, data.digitalocean_ssh_key.rebrain.id]
+  ssh_keys = [digitalocean_ssh_key.my_ssh_devops.id, data.digitalocean_ssh_key.another.id]
 }
 
 resource "local_file" "hosts" {
