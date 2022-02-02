@@ -1,10 +1,10 @@
 #Data block
 data "aws_route53_zone" "dns" {
-  name         = "devops.rebrain.srwx.net"
+  name         = "sample.sample.srwx.net"
   private_zone = false
 }
-data "digitalocean_ssh_key" "rebrain" {
-  name = "REBRAIN.SSH.PUB.KEY"
+data "digitalocean_ssh_key" "another" {
+  name = "another.SSH.PUB.KEY"
 }
 #create resource my_ssh_key
 resource "digitalocean_ssh_key" "my_ssh_dkocheto" {
@@ -46,14 +46,14 @@ resource "digitalocean_droplet" "Dkocheto" {
 }
 resource "null_resource" "playbook1" {
   provisioner "local-exec" {
-    command = "sleep 15 && ansible-playbook playbook1.yml -i dkochetov-1.devops.rebrain.srwx.net"
+    command = "sleep 15 && ansible-playbook playbook1.yml -i dkochetov-1.sample.sample.srwx.net"
   }
   depends_on = [aws_route53_record.dns_rebrain]
 }
 
 resource "null_resource" "playbook2" {
   provisioner "local-exec" {
-    command = "ansible-playbook playbook2.yml -i dkochetov-2.devops.rebrain.srwx.net"
+    command = "ansible-playbook playbook2.yml -i dkochetov-2.sample.sample.srwx.net"
   }
   depends_on = [null_resource.playbook1]
 }
