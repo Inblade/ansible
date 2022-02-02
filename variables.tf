@@ -6,9 +6,9 @@ variable "my_ssh_dkocheto" {
   type        = string
   description = "my_ssh_key"
 }
-variable "rebrain" {
+variable "another" {
   type        = string
-  description = "rebrain_ssh_key"
+  description = "another_ssh_key"
 }
 variable "ssh_fingerprint" {
   type        = string
