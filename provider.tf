@@ -1,22 +1,21 @@
-provider "digitalocean" { token = var.do_token }
-provider "aws" {
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
-  region     = "eu-west-1"
-}
+#provider "gcorelabs" { token = var.ga_token }
+#terraform {
+#  required_providers {
+#    gcore = {
+#      source = "G-Core/gcorelabs"
+#      version = "0.3.48"
+#    }
+#  }
+#}
 terraform {
   required_providers {
-    digitalocean = {
-      source  = "digitalocean/digitalocean"
-      version = "2.6.0"
-    }
-    aws = {
-      source  = "hashicorp/aws"
-      version = "3.33.0"
-    }
-    tls = {
-      source  = "hashicorp/tls"
-      version = "3.1.0"
+    gcorelabs = {
+      source = "G-Core/gcorelabs"
+      version = "0.3.48"
     }
   }
+}
+
+provider gcore {
+  permanent_api_token = "2360$b9311e3ae51b846586d01dce5174f1a537a728f5b04e41d36834530c6e57005039b66b3d8c734bacc2e46785dd2481fd46111778b7362c7d85bcc76f63ed49e1"
 }

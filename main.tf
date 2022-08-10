@@ -1,66 +1,51 @@
-#Data block
-data "aws_route53_zone" "dns" {
-  name         = "sample.sample.srwx.net"
-  private_zone = false
+resource "gcore_keypair" "kp" {
+  project_id = 1
+  sshkey_name = "59508_cloud_paas_ops_gcore_lu_1659953951"
 }
-data "digitalocean_ssh_key" "another" {
-  name = "another.SSH.PUB.KEY"
+
+resource "gcore_network" "network" {
+  name = "prvn"
+  mtu = 1450
+  type = "vxlan"
+  region_id = 1
+  project_id = 1
 }
-#create resource my_ssh_key
-resource "digitalocean_ssh_key" "my_ssh_dkocheto" {
-  name       = "my_ssh_dkocheto"
-  public_key = file("/home/inblade/.ssh/id_rsa.pub")
+
+resource "gcore_subnet" "subnet" {
+  name = "prvns"
+  cidr = "192.168.26.0/24"
+  network_id = gcore_network.network.id
+  dns_nameservers = ["8.8.4.4", "1.1.1.1"]
+
+  gateway_ip = "192.168.26.1"
+  region_id = 1
+  project_id = 1
 }
-#create tags for DO droplet
-resource "digitalocean_tag" "devops" {
-  name = "devops"
-}
-resource "digitalocean_tag" "mail" {
-  name = "dkocheto_at_gmail_com"
-}
-resource "aws_route53_record" "dns_rebrain" {
-  zone_id = data.aws_route53_zone.dns.zone_id
+
+resource "gcore_instance" "instance" {
+  flavor_id = "g1-standard-2-4"
   count   = length(var.domains)
-  name    = "dkochetov-${element(var.domains, count.index)}.${data.aws_route53_zone.dns.name}"
-  type    = "A"
-  ttl     = "30"
-  records = [element(digitalocean_droplet.Dkocheto.*.ipv4_address, count.index)]
-}
-#create DO droplet
-resource "digitalocean_droplet" "Dkocheto" {
-  count    = length(var.domains)
-  image    = "ubuntu-20-04-x64"
-  name     = "Dkocheto${count.index}"
-  region   = "nyc3"
-  size     = "s-1vcpu-1gb"
-  tags     = [digitalocean_tag.devops.id, digitalocean_tag.mail.id]
-  ssh_keys = [digitalocean_ssh_key.my_ssh_dkocheto.id, data.digitalocean_ssh_key.rebrain.id]
-  /*
-  provisioner "remote-exec" {
-    inline = ["touch /root/123"]
-  }
-*/
-  provisioner "local-exec" {
-    command = "sleep 15 && ./playbook.yml -i hosts"
-  }
-}
-resource "null_resource" "playbook1" {
-  provisioner "local-exec" {
-    command = "sleep 15 && ansible-playbook playbook1.yml -i dkochetov-1.sample.sample.srwx.net"
-  }
-  depends_on = [aws_route53_record.dns_rebrain]
-}
+  name = "Dkocheto${count.index}"
+  keypair_name = "59508_cloud_paas_ops_gcore_lu_1659953951"
 
-resource "null_resource" "playbook2" {
-  provisioner "local-exec" {
-    command = "ansible-playbook playbook2.yml -i dkochetov-2.sample.sample.srwx.net"
+  volume {
+    source = "existing-volume"
+    volume_id = gcore_volume.first_volume.id
+    boot_index = 0
   }
-  depends_on = [null_resource.playbook1]
-}
 
-resource "local_file" "hosts" {
+  interface {
+    type = "subnet"
+    network_id = gcore_network.network.id
+    subnet_id = gcore_subnet.subnet.id
+  }
+}
+  resource "local_file" "hosts" {
+  count = length(var.domains)
+  content = templatefile("inventory.tpl", {
+    ipaddr0 = gcore_instance.instance.0.ipv4_address,
+    ipaddr1 = gcore_instance.instance.1.ipv4_address
+    }
+  )
   filename = "hosts"
-  content = templatefile("${path.module}/inventory.tpl", {
-    ip = digitalocean_droplet.Dkocheto.*.ipv4_address
-  })
 }
